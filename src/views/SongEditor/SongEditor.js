@@ -1,6 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Form, Col, Button } from 'react-bootstrap'
 import './SongEditor.css'
+
+const validator = {
+  title: title => (!!title && !!title.trim()) ? '' : 'title is required',
+  slug: slug => (!!slug && !!slug.trim()) ? '' : 'slug is required',
+  artist: artist => (!!artist && !!artist.trim()) ? '' : 'artist is required',
+}
+
+const validate = form => Object.keys(validator)
+  .map(key => ({ [key]: validator[key](form[key]) }))
+  .reduce((a, b) => ({ ...a, ...b }), {})
 
 const SongEditor = () => {
 
@@ -13,25 +23,80 @@ const SongEditor = () => {
     }
   }
 
+  const [songForm, setSongForm] = useState({
+    title: '',
+    slug: '',
+    artist: '',
+  })
+
+  const [formErrors, setFormErrors] = useState({
+    title: '',
+    slug: '',
+    artist: '',
+  })
+
+  const handleChange = e => {
+    const key = e.target.name
+    const val = e.target.value
+    setSongForm({
+      ...songForm,
+      [key]: val,
+    })
+  }
+
+  const handleSubmit = e => {
+    e.preventDefault()
+    setFormErrors(validate(songForm))
+  }
+
   return (
     <>
       <h3>Add New Song</h3>
-      <Form>
+      <Form onSubmit={handleSubmit}>
         <Form.Group controlId="formTitle">
           <Form.Label>Title</Form.Label>
-          <Form.Control placeholder="Title" required />
+          <Form.Control 
+            name="title" 
+            placeholder="Title" 
+            value={songForm.title}
+            onChange={handleChange}
+            isInvalid={!!formErrors.title}
+          />
+          <Form.Control.Feedback type="invalid">
+            {formErrors.title}
+          </Form.Control.Feedback>
         </Form.Group>
 
         <Form.Group controlId="formSlug">
           <Form.Label>Slug</Form.Label>
-          <Form.Control placeholder="Slug" />
+          <Form.Control 
+            name="slug"
+            placeholder="Slug" 
+            value={songForm.slug}
+            onChange={handleChange}
+            isInvalid={!!formErrors.slug}
+          />
+          <Form.Control.Feedback type="invalid">
+            {formErrors.slug}
+          </Form.Control.Feedback>
         </Form.Group>
 
         <Form.Group controlId="formArtist">
           <Form.Label>Artist</Form.Label>
-          <Form.Control as="select" defaultValue="Choose Artist, Song Writer, Band, etc...">
-            <option value={null} disabled>Choose Artist, Song Writer, Band, etc...</option>
+          <Form.Control 
+            name="artist"
+            as="select" 
+            value={songForm.artist}
+            onChange={handleChange}
+            isInvalid={!!formErrors.artist}
+          >
+            <option value={null} disabled>
+              Choose Artist, Song Writer, Band, etc...
+            </option>
           </Form.Control>
+          <Form.Control.Feedback type="invalid">
+            {formErrors.artist}
+          </Form.Control.Feedback>
         </Form.Group>
 
         <Form.Row>
@@ -93,7 +158,11 @@ const SongEditor = () => {
           <Form.Control placeholder="https://" />
         </Form.Group>
 
-        <Button className="SongEditorForm__btn-submit" variant="warning">Submit</Button>{' '}
+        <Button 
+          className="SongEditorForm__btn-submit" 
+          type="submit"
+          variant="warning"
+        >Submit</Button>{' '}
         <Button variant="secondary">Cancel</Button>
       </Form>
     </>

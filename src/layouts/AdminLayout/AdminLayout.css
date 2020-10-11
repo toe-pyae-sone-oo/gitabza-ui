@@ -1,0 +1,20 @@
+.AdminLayoutContainer {
+  margin-left: 0;
+  padding: 72px 16px 16px;
+  transition: all .250s;
+  display: block;
+}
+
+.AdminLayoutContainer--is-open {
+  margin-left: 100%;
+  transition: all 0.250s;
+  display: none;
+}
+
+@media only screen and (min-width: 768px) {
+  .AdminLayoutContainer--is-open {
+    margin-left: 250px;
+    display: block;
+    width: auto;
+  }
+}

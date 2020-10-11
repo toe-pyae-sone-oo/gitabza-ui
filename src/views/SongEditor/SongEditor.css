@@ -1,0 +1,21 @@
+.SongEditorForm__btn-submit {
+  color: white;
+  background-color: #ffb400;
+  border-color: #ffb400;
+}
+
+.SongEditorForm__btn-submit:hover {
+  color: white;
+}
+
+.SongEditorForm__btn-submit:focus {
+  color: white;
+}
+
+.SongEditorForm__btn-submit:active {
+  color: white !important;
+}
+
+.SongEditorForm__lyrics {
+  font-family: monospace;
+}

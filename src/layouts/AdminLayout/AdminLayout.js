@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
+import { Switch, Route } from 'react-router-dom'
 import { Container, Row, Col } from 'react-bootstrap'
 import classNames from 'classnames'
+import SongEditor from '../../views/SongEditor/SongEditor'
 import AdminNav from '../../components/AdminNav/AdminNav'
 import AdminSidebar from '../../components/AdminSideBar/AdminSideBar'
 import './AdminLayout.css'
@@ -20,14 +22,9 @@ const AdminLayout = () => {
       >
         <Row>
           <Col>
-            <p className="py-5">This is a start</p>
-            <p className="py-5">This is a test</p>
-            <p className="py-5">This is a test</p>
-            <p className="py-5">This is a test</p>
-            <p className="py-5">This is a test</p>
-            <p className="py-5">This is a test</p>
-            <p className="py-5">This is a test</p>
-            <p className="py-5">This is an end</p>
+            <Switch>
+              <Route path="/admin/songs/new" component={SongEditor} />
+            </Switch>
           </Col>
         </Row>
       </Container>

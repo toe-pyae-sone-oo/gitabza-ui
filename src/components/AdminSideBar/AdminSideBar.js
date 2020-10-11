@@ -7,20 +7,37 @@ import './AdminSideBar.css'
 const AdminSideBar = ({ isOpen }) => 
   <Nav 
     defaultActiveKey="/admin" 
-    className={classNames('flex-column', 'Sidebar', { 'Sidebar--is-open': isOpen })}
+    className={classNames('flex-column', 'bg-dark', 'Sidebar', { 'Sidebar--is-open': isOpen })}
     variant="pills"
   >
     <Nav.Item>
-      <Nav.Link as={NavLink} exact to="/admin">Dashboard</Nav.Link>
+      <Nav.Link 
+        as={NavLink} 
+        exact 
+        to="/admin" 
+        className="text-light"
+      >Dashboard</Nav.Link>
     </Nav.Item>
     <Nav.Item>
-      <Nav.Link as={NavLink} to="/admin/artists">Artists</Nav.Link>
+      <Nav.Link 
+        as={NavLink} 
+        to="/admin/artists"
+        className="text-light"
+      >Artists</Nav.Link>
     </Nav.Item>
     <Nav.Item>
-      <Nav.Link as={NavLink} to="/admin/songs">Songs</Nav.Link>
+      <Nav.Link 
+        as={NavLink} 
+        to="/admin/songs"
+        className="text-light"
+      >Songs</Nav.Link>
     </Nav.Item>
     <Nav.Item>
-      <Nav.Link as={NavLink} to="/admin/account">Account</Nav.Link>
+      <Nav.Link 
+        as={NavLink} 
+        to="/admin/account"
+        className="text-light"
+      >Account</Nav.Link>
     </Nav.Item>
   </Nav>
 

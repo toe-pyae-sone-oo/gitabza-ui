@@ -1,15 +1,28 @@
 import React, { useState } from 'react'
+import { connect } from 'react-redux'
 import { Form, Col, Button, Card } from 'react-bootstrap'
 import { validate } from '../../validators/songs'
 import { getCapo } from '../../helpers/songs'
+import { SAVE_SONG } from '../../constants/actionTypes'
+import { create } from '../../api/songs'
 import './SongEditor.css'
 
-const SongEditor = () => {
+const mapDispatchToProps = dispatch => ({
+  save: song => dispatch({ type: SAVE_SONG, payload: song })
+})
+
+const SongEditor = ({ save }) => {
 
   const [form, setForm] = useState({
     title: '',
     slug: '',
     artists: [],
+    types: 'none',
+    difficulty: 'none',
+    capo: 'none',
+    version: '',
+    lyrics: '',
+    youtube: '',
   })
 
   const [errors, setErrors] = useState({
@@ -37,9 +50,24 @@ const SongEditor = () => {
     })
   }
 
-  const handleSubmit = e => {
+  const handleError = ({ response }) => {
+    if (response && response.status === 422) {
+      if (response.data && response.data.message === 'slug already exists') {
+        setErrors({ ...errors, slug: response.data.message })
+      }
+    }
+  }
+
+  const handleSubmit = async e => {
     e.preventDefault()
-    setErrors(validate(form))
+
+    const _errors = validate(form)
+    setErrors(_errors)
+
+    const isValid = Object.values(_errors).every(err => !err)
+    if (isValid) {
+      create(form).then(save).catch(handleError)
+    }
   }
 
   return (
@@ -100,25 +128,33 @@ const SongEditor = () => {
             <Form.Row>
               <Form.Group as={Col} controlId="formTypes">
                 <Form.Label>Types</Form.Label>
-                <Form.Control as="select" defaultValue="Choose Type">
-                  <option value={null} disabled>Choose Type</option>
-                  <option value={null}>None</option>
-                  <option>Bass</option>
-                  <option>Chords</option>
-                  <option>Drum</option>
-                  <option>Tabs</option>
-                  <option>Ukelele</option>
+                <Form.Control 
+                  name="types"
+                  as="select" 
+                  value={form.types}
+                  onChange={handleChange}
+                >
+                  <option value="none">None</option>
+                  <option value="bass">Bass</option>
+                  <option value="chords">Chords</option>
+                  <option value="drum">Drum</option>
+                  <option value="tabs">Tabs</option>
+                  <option value="ukelele">Ukelele</option>
                 </Form.Control>
               </Form.Group>
               
               <Form.Group as={Col} controlId="formDifficulty">
                 <Form.Label>Difficulty</Form.Label>
-                <Form.Control as="select" defaultValue="Choose Difficulty">
-                  <option value={null} disabled>Choose Difficulty</option>
-                  <option value={null}>None</option>
-                  <option>Novice</option>
-                  <option>Intermediate</option>
-                  <option>Advanced</option>
+                <Form.Control 
+                  name="difficulty"
+                  as="select" 
+                  value={form.difficulty}
+                  onChange={handleChange}
+                >
+                  <option value="none">None</option>
+                  <option value="novice">Novice</option>
+                  <option value="intermediate">Intermediate</option>
+                  <option value="advanced">Advanced</option>
                 </Form.Control>
               </Form.Group>
             </Form.Row>
@@ -126,34 +162,51 @@ const SongEditor = () => {
             <Form.Row>
               <Form.Group as={Col} controlId="formCapo">
                 <Form.Label>Capo</Form.Label>
-                <Form.Control as="select" defaultValue="Choose Capo">
-                  <option value={null} disabled>Choose Capo</option>
-                  <option value={null}>None</option>
+                <Form.Control 
+                  name="capo"
+                  as="select" 
+                  value={form.capo}
+                  onChange={handleChange}
+                >
+                  <option value="none">None</option>
                   {[...Array(12).keys()].map(i => 
-                    <option key={i}>{getCapo(i + 1)}</option>
+                    <option key={i} value={getCapo(i + 1)}>{getCapo(i + 1)}</option>
                   )}
                 </Form.Control>
               </Form.Group>
               
               <Form.Group as={Col} controlId="formVersion">
                 <Form.Label>Version</Form.Label>
-                <Form.Control placeholder="Version" />
+                <Form.Control 
+                  name="version"
+                  placeholder="Version" 
+                  value={form.version}
+                  onChange={handleChange}
+                />
               </Form.Group>
             </Form.Row>
 
             <Form.Group controlId="formLyrics">
               <Form.Label>Lyrics & Chords</Form.Label>
               <Form.Control 
+                name="lyrics"
                 as="textarea" 
                 rows={10} 
                 placeholder="Lyrics & Chords"
                 className="SongEditorForm__lyrics" 
+                value={form.lyrics}
+                onChange={handleChange}
               />
             </Form.Group>
 
             <Form.Group controlId="formYoutube">
               <Form.Label>Youtube</Form.Label>
-              <Form.Control placeholder="https://" />
+              <Form.Control 
+                name="youtube"
+                placeholder="https://" 
+                value={form.youtube}
+                onChange={handleChange}
+              />
             </Form.Group>
 
             <Button 
@@ -170,4 +223,4 @@ const SongEditor = () => {
 }
   
 
-export default SongEditor
+export default connect(null, mapDispatchToProps)(SongEditor)

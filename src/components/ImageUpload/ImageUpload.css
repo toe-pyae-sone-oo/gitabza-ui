@@ -1,0 +1,8 @@
+.ImageUpload--file {
+  display: none;
+}
+
+.ImageUpload--img {
+  cursor: pointer;
+  object-fit: contain;
+}

@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom'
 import { Container, Row, Col } from 'react-bootstrap'
 import classNames from 'classnames'
 import SongEditor from '../../views/SongEditor/SongEditor'
+import ArtistEditor from '../../views/ArtistEditor/ArtistEditor'
 import AdminNav from '../../components/AdminNav/AdminNav'
 import AdminSidebar from '../../components/AdminSideBar/AdminSideBar'
 import './AdminLayout.css'
@@ -47,6 +48,7 @@ const AdminLayout = () => {
         <Row>
           <Col>
             <Switch>
+              <Route path="/admin/artists/new" component={ArtistEditor} />
               <Route path="/admin/songs/new" component={SongEditor} />
             </Switch>
           </Col>

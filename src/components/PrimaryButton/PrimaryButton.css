@@ -1,0 +1,21 @@
+.PrimaryButton {
+  color: white;
+  background-color: #ffb400;
+  border-color: #ffb400;
+}
+
+.PrimaryButton:hover {
+  color: white;
+}
+
+.PrimaryButton:focus {
+  color: white;
+}
+
+.PrimaryButton:active {
+  color: white !important;
+}
+
+.PrimaryButton:disabled {
+  color: white;
+}

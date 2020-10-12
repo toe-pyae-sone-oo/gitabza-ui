@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Switch, Route } from 'react-router-dom'
 import { Container, Row, Col } from 'react-bootstrap'
 import classNames from 'classnames'
@@ -7,10 +7,34 @@ import AdminNav from '../../components/AdminNav/AdminNav'
 import AdminSidebar from '../../components/AdminSideBar/AdminSideBar'
 import './AdminLayout.css'
 
+const WIDTH_LIMIT = 768
+
 const AdminLayout = () => {
-  const [isOpen, setOpen] = useState(true)
+  const [isOpen, setOpen] = useState(window.innerWidth > WIDTH_LIMIT)
+  const [prevWidth, setPrevWidth] = useState(-1)
 
   const toggleSidebar = () => setOpen(!isOpen)
+
+  useEffect(() => {
+    const updateWidth = () => {
+      const width = window.innerWidth
+      const isMobile = width <= WIDTH_LIMIT
+      const wasMobile = prevWidth <= WIDTH_LIMIT
+  
+      if (isMobile !== wasMobile) {
+        setOpen(!isMobile)
+      }
+  
+      setPrevWidth(width)
+    }
+
+    updateWidth()
+
+    window.addEventListener('resize', updateWidth)
+
+    return () => window.removeEventListener('resize', updateWidth)
+    
+  }, [prevWidth])
 
   return (
     <div>

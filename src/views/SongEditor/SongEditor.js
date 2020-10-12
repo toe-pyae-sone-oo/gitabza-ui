@@ -5,6 +5,7 @@ import { validate } from '../../validators/songs'
 import { getCapo } from '../../helpers/songs'
 import { SAVE_SONG } from '../../constants/actionTypes'
 import { create } from '../../api/songs'
+import PrimaryButton from '../../components/PrimaryButton/PrimaryButton'
 import './SongEditor.css'
 
 const mapStateToProps = state => ({
@@ -225,12 +226,11 @@ const SongEditor = ({ save, loading, history }) => {
               />
             </Form.Group>
 
-            <Button 
-              className="SongEditorForm__btn-submit mr-2" 
+            <PrimaryButton
+              className="mr-2" 
               type="submit"
-              variant="warning"
               disabled={loading}
-            >{loading ? 'Loading...' : 'Save'}</Button>
+            >{loading ? 'Loading...' : 'Save'}</PrimaryButton>
             <Button variant="secondary">Cancel</Button>
           </Form>
         </Card.Body>
@@ -239,5 +239,4 @@ const SongEditor = ({ save, loading, history }) => {
   )
 }
   
-
 export default connect(mapStateToProps, mapDispatchToProps)(SongEditor)

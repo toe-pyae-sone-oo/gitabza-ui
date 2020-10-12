@@ -16,6 +16,10 @@
   color: white !important;
 }
 
+.SongEditorForm__btn-submit:disabled {
+  color: white;
+}
+
 .SongEditorForm__lyrics {
   font-family: monospace;
 }

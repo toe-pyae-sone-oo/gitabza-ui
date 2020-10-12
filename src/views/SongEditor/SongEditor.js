@@ -7,11 +7,15 @@ import { SAVE_SONG } from '../../constants/actionTypes'
 import { create } from '../../api/songs'
 import './SongEditor.css'
 
+const mapStateToProps = state => ({
+  loading: state.loading,
+})
+
 const mapDispatchToProps = dispatch => ({
   save: song => dispatch({ type: SAVE_SONG, payload: song })
 })
 
-const SongEditor = ({ save }) => {
+const SongEditor = ({ save, loading, history }) => {
 
   const [form, setForm] = useState({
     title: '',
@@ -50,10 +54,10 @@ const SongEditor = ({ save }) => {
     })
   }
 
-  const handleError = ({ response }) => {
+  const handleError = _errors => ({ response }) => {
     if (response && response.status === 422) {
       if (response.data && response.data.message === 'slug already exists') {
-        setErrors({ ...errors, slug: response.data.message })
+        setErrors({ ..._errors, slug: response.data.message })
       }
     }
   }
@@ -66,7 +70,10 @@ const SongEditor = ({ save }) => {
 
     const isValid = Object.values(_errors).every(err => !err)
     if (isValid) {
-      create(form).then(save).catch(handleError)
+      create(form)
+        .then(save)
+        .then(() => history.push('/admin/songs'))
+        .catch(handleError(_errors))
     }
   }
 
@@ -84,6 +91,7 @@ const SongEditor = ({ save }) => {
                 value={form.title}
                 onChange={handleChange}
                 isInvalid={!!errors.title}
+                disabled={loading}
               />
               <Form.Control.Feedback type="invalid">
                 {errors.title}
@@ -98,6 +106,7 @@ const SongEditor = ({ save }) => {
                 value={form.slug}
                 onChange={handleChange}
                 isInvalid={!!errors.slug}
+                disabled={loading}
               />
               <Form.Control.Feedback type="invalid">
                 {errors.slug}
@@ -113,6 +122,7 @@ const SongEditor = ({ save }) => {
                 value={form.artists}
                 onChange={handleArtists}
                 isInvalid={!!errors.artists}
+                disabled={loading}
               >
                 <option value={null} disabled>
                   Choose Artist, Song Writer, Band, etc...
@@ -133,6 +143,7 @@ const SongEditor = ({ save }) => {
                   as="select" 
                   value={form.types}
                   onChange={handleChange}
+                  disabled={loading}
                 >
                   <option value="none">None</option>
                   <option value="bass">Bass</option>
@@ -150,6 +161,7 @@ const SongEditor = ({ save }) => {
                   as="select" 
                   value={form.difficulty}
                   onChange={handleChange}
+                  disabled={loading}
                 >
                   <option value="none">None</option>
                   <option value="novice">Novice</option>
@@ -167,6 +179,7 @@ const SongEditor = ({ save }) => {
                   as="select" 
                   value={form.capo}
                   onChange={handleChange}
+                  disabled={loading}
                 >
                   <option value="none">None</option>
                   {[...Array(12).keys()].map(i => 
@@ -182,6 +195,7 @@ const SongEditor = ({ save }) => {
                   placeholder="Version" 
                   value={form.version}
                   onChange={handleChange}
+                  disabled={loading}
                 />
               </Form.Group>
             </Form.Row>
@@ -196,6 +210,7 @@ const SongEditor = ({ save }) => {
                 className="SongEditorForm__lyrics" 
                 value={form.lyrics}
                 onChange={handleChange}
+                disabled={loading}
               />
             </Form.Group>
 
@@ -206,6 +221,7 @@ const SongEditor = ({ save }) => {
                 placeholder="https://" 
                 value={form.youtube}
                 onChange={handleChange}
+                disabled={loading}
               />
             </Form.Group>
 
@@ -213,7 +229,8 @@ const SongEditor = ({ save }) => {
               className="SongEditorForm__btn-submit mr-2" 
               type="submit"
               variant="warning"
-            >Submit</Button>
+              disabled={loading}
+            >{loading ? 'Loading...' : 'Save'}</Button>
             <Button variant="secondary">Cancel</Button>
           </Form>
         </Card.Body>
@@ -223,4 +240,4 @@ const SongEditor = ({ save }) => {
 }
   
 
-export default connect(null, mapDispatchToProps)(SongEditor)
+export default connect(mapStateToProps, mapDispatchToProps)(SongEditor)

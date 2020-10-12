@@ -9,13 +9,13 @@ const SongEditor = () => {
   const [form, setForm] = useState({
     title: '',
     slug: '',
-    artist: '',
+    artists: [],
   })
 
   const [errors, setErrors] = useState({
     title: '',
     slug: '',
-    artist: '',
+    artists: '',
   })
 
   const handleChange = e => {
@@ -24,6 +24,16 @@ const SongEditor = () => {
     setForm({
       ...form,
       [key]: val,
+    })
+  }
+
+  const handleArtists = e => {
+    setForm({
+      ...form,
+      artists: Array.from(
+        e.target.selectedOptions, 
+        item => item.value
+      )
     })
   }
 
@@ -67,20 +77,23 @@ const SongEditor = () => {
             </Form.Group>
 
             <Form.Group controlId="formArtist">
-              <Form.Label>Artist</Form.Label>
+              <Form.Label>Artists</Form.Label>
               <Form.Control 
-                name="artist"
+                name="artists"
                 as="select" 
-                value={form.artist}
-                onChange={handleChange}
-                isInvalid={!!errors.artist}
+                multiple
+                value={form.artists}
+                onChange={handleArtists}
+                isInvalid={!!errors.artists}
               >
                 <option value={null} disabled>
                   Choose Artist, Song Writer, Band, etc...
                 </option>
+                <option>Y Wine</option>
+                <option>Lay Phyu</option>
               </Form.Control>
               <Form.Control.Feedback type="invalid">
-                {errors.artist}
+                {errors.artists}
               </Form.Control.Feedback>
             </Form.Group>
 

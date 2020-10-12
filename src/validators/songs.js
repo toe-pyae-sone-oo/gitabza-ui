@@ -1,7 +1,7 @@
 const validator = {
   title: title => (!!title && !!title.trim()) ? '' : 'title is required',
   slug: slug => (!!slug && !!slug.trim()) ? '' : 'slug is required',
-  artist: artist => (!!artist && !!artist.trim()) ? '' : 'artist is required',
+  artists: artists => (artists.length > 0) ? '' : 'artists is required',
 }
 
 export const validate = form => Object.keys(validator)

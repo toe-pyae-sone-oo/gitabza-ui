@@ -29,7 +29,7 @@ const ArtistEditor = () =>
             <ImageUpload onUpload={console.log} />
           </Form.Group>
           <PrimaryButton className="mr-2">Save</PrimaryButton>
-          <Button>Cancel</Button>
+          <Button variant="secondary">Cancel</Button>
         </Form>
       </Card.Body>
     </Card>

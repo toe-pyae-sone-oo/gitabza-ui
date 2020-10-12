@@ -1,35 +1,18 @@
 import React, { useState } from 'react'
 import { Form, Col, Button } from 'react-bootstrap'
+import { validate } from '../../validators/songs'
+import { getCapo } from '../../helpers/songs'
 import './SongEditor.css'
-
-const validator = {
-  title: title => (!!title && !!title.trim()) ? '' : 'title is required',
-  slug: slug => (!!slug && !!slug.trim()) ? '' : 'slug is required',
-  artist: artist => (!!artist && !!artist.trim()) ? '' : 'artist is required',
-}
-
-const validate = form => Object.keys(validator)
-  .map(key => ({ [key]: validator[key](form[key]) }))
-  .reduce((a, b) => ({ ...a, ...b }), {})
 
 const SongEditor = () => {
 
-  const getCapo = i => {
-    switch (i) {
-      case 1: return '1st fret'
-      case 2: return '2nd fret'
-      case 3: return '3rd fret'
-      default: return `${i}th fret`
-    }
-  }
-
-  const [songForm, setSongForm] = useState({
+  const [form, setForm] = useState({
     title: '',
     slug: '',
     artist: '',
   })
 
-  const [formErrors, setFormErrors] = useState({
+  const [errors, setErrors] = useState({
     title: '',
     slug: '',
     artist: '',
@@ -38,15 +21,15 @@ const SongEditor = () => {
   const handleChange = e => {
     const key = e.target.name
     const val = e.target.value
-    setSongForm({
-      ...songForm,
+    setForm({
+      ...form,
       [key]: val,
     })
   }
 
   const handleSubmit = e => {
     e.preventDefault()
-    setFormErrors(validate(songForm))
+    setErrors(validate(form))
   }
 
   return (
@@ -58,12 +41,12 @@ const SongEditor = () => {
           <Form.Control 
             name="title" 
             placeholder="Title" 
-            value={songForm.title}
+            value={form.title}
             onChange={handleChange}
-            isInvalid={!!formErrors.title}
+            isInvalid={!!errors.title}
           />
           <Form.Control.Feedback type="invalid">
-            {formErrors.title}
+            {errors.title}
           </Form.Control.Feedback>
         </Form.Group>
 
@@ -72,12 +55,12 @@ const SongEditor = () => {
           <Form.Control 
             name="slug"
             placeholder="Slug" 
-            value={songForm.slug}
+            value={form.slug}
             onChange={handleChange}
-            isInvalid={!!formErrors.slug}
+            isInvalid={!!errors.slug}
           />
           <Form.Control.Feedback type="invalid">
-            {formErrors.slug}
+            {errors.slug}
           </Form.Control.Feedback>
         </Form.Group>
 
@@ -86,16 +69,16 @@ const SongEditor = () => {
           <Form.Control 
             name="artist"
             as="select" 
-            value={songForm.artist}
+            value={form.artist}
             onChange={handleChange}
-            isInvalid={!!formErrors.artist}
+            isInvalid={!!errors.artist}
           >
             <option value={null} disabled>
               Choose Artist, Song Writer, Band, etc...
             </option>
           </Form.Control>
           <Form.Control.Feedback type="invalid">
-            {formErrors.artist}
+            {errors.artist}
           </Form.Control.Feedback>
         </Form.Group>
 

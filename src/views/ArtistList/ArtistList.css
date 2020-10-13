@@ -1,0 +1,11 @@
+.ArtistList__num-col {
+  width: 10%;
+}
+
+.ArtistList__name-col {
+  width: 70%;
+}
+
+.ArtistList__action-col {
+  width: 20%;
+}

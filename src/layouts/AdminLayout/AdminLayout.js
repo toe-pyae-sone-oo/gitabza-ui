@@ -4,6 +4,7 @@ import { Container, Row, Col } from 'react-bootstrap'
 import classNames from 'classnames'
 import SongEditor from '../../views/SongEditor/SongEditor'
 import ArtistEditor from '../../views/ArtistEditor/ArtistEditor'
+import ArtistList from '../../views/ArtistList/ArtistList'
 import AdminNav from '../../components/AdminNav/AdminNav'
 import AdminSidebar from '../../components/AdminSideBar/AdminSideBar'
 import './AdminLayout.css'
@@ -48,6 +49,7 @@ const AdminLayout = () => {
         <Row>
           <Col>
             <Switch>
+              <Route exact path="/admin/artists" component={ArtistList} />
               <Route path="/admin/artists/new" component={ArtistEditor} />
               <Route path="/admin/songs/new" component={SongEditor} />
             </Switch>

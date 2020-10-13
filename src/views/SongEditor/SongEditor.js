@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { Form, Col, Button, Card } from 'react-bootstrap'
-import { validate } from '../../validators/songs'
+import { validateSongForm } from '../../validators'
 import { getCapo } from '../../helpers/songs'
 import { SAVE_SONG } from '../../constants/actionTypes'
 import { create } from '../../api/songs'

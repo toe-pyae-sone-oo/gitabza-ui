@@ -66,7 +66,7 @@ const SongEditor = ({ save, loading, history }) => {
   const handleSubmit = async e => {
     e.preventDefault()
 
-    const _errors = validate(form)
+    const _errors = validateSongForm(form)
     setErrors(_errors)
 
     const isValid = Object.values(_errors).every(err => !err)

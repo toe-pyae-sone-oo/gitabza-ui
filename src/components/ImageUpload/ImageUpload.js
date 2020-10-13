@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Form, Image } from 'react-bootstrap'
 import './ImageUpload.css'
 
-const ImageUpload = ({ onUpload, width = 100, height = 100 }) => {
+const ImageUpload = ({ onUpload, width = 150, height = 150 }) => {
 
   const [file, setFile] = useState(undefined)
   const [fileUrl, setFileUrl] = useState(undefined)
@@ -24,7 +24,11 @@ const ImageUpload = ({ onUpload, width = 100, height = 100 }) => {
   }, [file])
 
   return (
-    <div>
+    <div 
+      className="ImageUpload"
+      onClick={handleClick}
+      style={{ width, height }}
+    >
       <Form.File 
         ref={input => _file = input} 
         className="ImageUpload--file"
@@ -36,7 +40,6 @@ const ImageUpload = ({ onUpload, width = 100, height = 100 }) => {
         style={{ width, height }}
         thumbnail
         src={fileUrl ? fileUrl : `${window.location.origin}/logo192.png`} 
-        onClick={handleClick}
       />
     </div>
   ) 

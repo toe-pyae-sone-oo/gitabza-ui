@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux'
-import songs from './songs'
 import loading from './loading'
-import artists from './artists'
+import adminArtists from './adminArtists'
+import adminSongs from './adminSongs'
 
 export default combineReducers({
-  songs,
   loading,
-  artists,
+  adminArtists,
+  adminSongs,
 })

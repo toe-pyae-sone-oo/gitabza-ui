@@ -3,7 +3,6 @@ import { Card, Form, Button } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import ImageUpload from '../../components/ImageUpload/ImageUpload'
 import PrimaryButton from '../../components/PrimaryButton/PrimaryButton'
-import { SAVE_ARTIST } from '../../constants/actionTypes'
 import { create, upload } from '../../api/artists'
 import { validateArtistForm } from '../../validators'
 import './ArtistEditor.css'
@@ -13,10 +12,10 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  save: payload => dispatch({ type: SAVE_ARTIST, payload })
+
 })
 
-const ArtistEditor = ({ loading, save, history }) => {
+const ArtistEditor = ({ loading, history }) => {
 
   const [form, setForm] = useState({
     name: '',
@@ -71,7 +70,6 @@ const ArtistEditor = ({ loading, save, history }) => {
       }
       // handle creating new artist
       create({ ...form, picture })
-        .then(save)
         .then(() => history.push('/admin/artists'))
         .catch(handleError(_errors))
     }

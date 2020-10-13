@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { Form, Col, Button, Card } from 'react-bootstrap'
 import { validateSongForm } from '../../validators'
 import { getCapo } from '../../helpers/songs'
-import { SAVE_SONG } from '../../constants/actionTypes'
 import { create } from '../../api/songs'
 import PrimaryButton from '../../components/PrimaryButton/PrimaryButton'
 import './SongEditor.css'
@@ -13,10 +12,9 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  save: song => dispatch({ type: SAVE_SONG, payload: song })
 })
 
-const SongEditor = ({ save, loading, history }) => {
+const SongEditor = ({ loading, history }) => {
 
   const [form, setForm] = useState({
     title: '',
@@ -72,7 +70,6 @@ const SongEditor = ({ save, loading, history }) => {
     const isValid = Object.values(_errors).every(err => !err)
     if (isValid) {
       create(form)
-        .then(save)
         .then(() => history.push('/admin/songs'))
         .catch(handleError(_errors))
     }

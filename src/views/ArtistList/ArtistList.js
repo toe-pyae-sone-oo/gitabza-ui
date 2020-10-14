@@ -165,6 +165,7 @@ const ArtistList = ({ artists = [], count, loading, load, history }) => {
                           variant="success" 
                           className="mr-1" 
                           size="sm"
+                          onClick={() => history.push(`/admin/artists/${artist.uuid}/edit`)}
                         >
                           <FontAwesomeIcon size="sm" icon={faPencilAlt} />
                         </Button>

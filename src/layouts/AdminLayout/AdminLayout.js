@@ -51,6 +51,7 @@ const AdminLayout = () => {
             <Switch>
               <Route exact path="/admin/artists" component={ArtistList} />
               <Route path="/admin/artists/new" component={ArtistEditor} />
+              <Route path="/admin/artists/:id/edit" component={ArtistEditor} />
               <Route path="/admin/songs/new" component={SongEditor} />
             </Switch>
           </Col>

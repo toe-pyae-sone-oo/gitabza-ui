@@ -34,7 +34,7 @@ const ArtistList = ({ artists = [], count, loading, load, history }) => {
   useEffect(() => {
     setPagination({
       active: 1,
-      pages: count ? parseInt(count / LIMIT_PER_PAGE) : 0
+      pages: count ? parseInt(count / LIMIT_PER_PAGE) + 1 : 0
     })
   }, [count])
 

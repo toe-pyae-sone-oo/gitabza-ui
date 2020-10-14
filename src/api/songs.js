@@ -16,3 +16,13 @@ export const find = ({ title = undefined, skip = 0, limit = 10 }) => {
 export const remove = id => {
   return httpClient.delete(`/songs/${id}`)
 }
+
+export const findById = id => {
+  return httpClient.get(`/songs/${id}`)
+    .then(({ data }) => data)
+}
+
+export const update = (id, payload) => {
+  return httpClient.put(`/songs/${id}`, payload)
+    .then(({ data }) => data)
+}

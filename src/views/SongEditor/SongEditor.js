@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Form, Col, Button, Card } from 'react-bootstrap'
 import { validateSongForm } from '../../validators'
 import { getCapo } from '../../helpers/songs'
-import { create } from '../../api/songs'
+import { create, findById, update } from '../../api/songs'
 import PrimaryButton from '../../components/PrimaryButton/PrimaryButton'
 import './SongEditor.css'
 
@@ -11,10 +11,9 @@ const mapStateToProps = state => ({
   loading: state.loading,
 })
 
-const mapDispatchToProps = dispatch => ({
-})
-
-const SongEditor = ({ loading, history }) => {
+const SongEditor = ({ loading, history, match }) => {
+  
+  const songId = match.params.id
 
   const [form, setForm] = useState({
     title: '',
@@ -43,6 +42,18 @@ const SongEditor = ({ loading, history }) => {
     })
   }
 
+  useEffect(() => {
+    let mounted = true
+    if (songId) {
+      findById(songId).then(data => {
+        if (mounted) {
+          setForm({ ...data })
+        }
+      })
+    }
+    return () => mounted = false
+  }, [songId])
+
   const handleArtists = e => {
     setForm({
       ...form,
@@ -69,9 +80,15 @@ const SongEditor = ({ loading, history }) => {
 
     const isValid = Object.values(_errors).every(err => !err)
     if (isValid) {
-      create(form)
-        .then(() => history.push('/admin/songs'))
-        .catch(handleError(_errors))
+      if (songId) {
+        update(songId, form)
+          .then(() => history.push('/admin/songs'))
+          .catch(handleError(_errors))
+      } else {
+        create(form)
+          .then(() => history.push('/admin/songs'))
+          .catch(handleError(_errors))
+      }
     }
   }
 
@@ -228,7 +245,10 @@ const SongEditor = ({ loading, history }) => {
               type="submit"
               disabled={loading}
             >{loading ? 'Loading...' : 'Save'}</PrimaryButton>
-            <Button variant="secondary">Cancel</Button>
+            <Button 
+              variant="secondary"
+              onClick={() => history.push('/admin/songs')}
+            >Cancel</Button>
           </Form>
         </Card.Body>
       </Card>
@@ -236,4 +256,4 @@ const SongEditor = ({ loading, history }) => {
   )
 }
   
-export default connect(mapStateToProps, mapDispatchToProps)(SongEditor)
+export default connect(mapStateToProps)(SongEditor)

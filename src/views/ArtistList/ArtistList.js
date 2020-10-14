@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Card, Table, Button, InputGroup, FormControl, Pagination } from 'react-bootstrap'
+import { Card, Table, Button, InputGroup, FormControl, Pagination, Modal } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import PrimaryButton from '../../components/PrimaryButton/PrimaryButton'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -26,6 +26,8 @@ const ArtistList = ({ artists = [], count, loading, load }) => {
 
   const [search, setSearch] = useState('')
   const [pagination, setPagination] = useState({ active: 1, pages: 1 })
+  const [dialog, setDialog] = useState(false)
+  const [deleteId, setDeleteId] = useState(undefined)
 
   useEffect(() => { find({ limit: LIMIT_PER_PAGE }).then(handleLoad(load)) }, [load])
 
@@ -59,7 +61,17 @@ const ArtistList = ({ artists = [], count, loading, load }) => {
   }
 
   const handleDelete = id => {
-    remove(id)
+    setDialog(true)
+    setDeleteId(id)
+  }
+
+  const cancelDelete = () => {
+    setDialog(false)
+    setDeleteId(undefined)
+  }
+
+  const deleteArtist = () => {
+    remove(deleteId)
       .then(() => find({ 
         name: search.trim() ?? undefined,
         skip: (pagination.page - 1) * LIMIT_PER_PAGE,
@@ -72,10 +84,29 @@ const ArtistList = ({ artists = [], count, loading, load }) => {
           ? pagination.pages 
           : pagination.active,
       }))
+    setDialog(false)
   }
 
   return (
     <>
+      <Modal 
+        animation={false}
+        show={dialog} 
+        onHide={cancelDelete}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Confirmation</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure to delete?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={cancelDelete}>
+            Close
+          </Button>
+          <Button variant="danger" onClick={deleteArtist}>
+            Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
       <Card>
         <Card.Body>
           <Card.Title className="d-flex align-items-center">

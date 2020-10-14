@@ -135,7 +135,10 @@ const ArtistEditor = ({ loading, history, match }) => {
               className="mr-2" 
               disabled={loading}
             >{loading ? 'Loading...' : 'Save'}</PrimaryButton>
-            <Button variant="secondary">Cancel</Button>
+            <Button 
+              variant="secondary"
+              onClick={() => history.push('/admin/artists')}
+            >Cancel</Button>
           </Form>
         </Card.Body>
       </Card>

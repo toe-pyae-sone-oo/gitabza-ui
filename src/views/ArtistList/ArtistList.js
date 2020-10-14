@@ -8,7 +8,7 @@ import { find, remove } from '../../api/artists'
 import { LOAD_ADMIN_ARTISTS } from '../../constants/actionTypes'
 import './ArtistList.css'
 
-const LIMIT_PER_PAGE = 2
+const LIMIT_PER_PAGE = 10
 
 const mapPropsToState = state => ({
   artists: state.adminArtists.data,

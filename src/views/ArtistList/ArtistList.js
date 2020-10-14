@@ -22,7 +22,7 @@ const mapDispatchToState = dispatch => ({
 
 const handleLoad = load =>  ({ artists, count }) => load({ count, data: artists })
 
-const ArtistList = ({ artists = [], count, loading, load }) => {
+const ArtistList = ({ artists = [], count, loading, load, history }) => {
 
   const [search, setSearch] = useState('')
   const [pagination, setPagination] = useState({ active: 1, pages: 1 })
@@ -111,7 +111,10 @@ const ArtistList = ({ artists = [], count, loading, load }) => {
         <Card.Body>
           <Card.Title className="d-flex align-items-center">
             <div className="mr-auto">Artists</div>
-            <PrimaryButton className="align-self-end">
+            <PrimaryButton 
+              className="align-self-end" 
+              onClick={() => history.push('/admin/artists/new')}
+            >
               <FontAwesomeIcon size="sm" icon={faPlus} />{' '}
               New
             </PrimaryButton>

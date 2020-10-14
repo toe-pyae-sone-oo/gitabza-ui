@@ -8,7 +8,7 @@ import { find, remove } from '../../api/artists'
 import { LOAD_ADMIN_ARTISTS } from '../../constants/actionTypes'
 import './ArtistList.css'
 
-const LIMIT_PER_PAGE = 10
+const LIMIT_PER_PAGE = 2
 
 const mapPropsToState = state => ({
   artists: state.adminArtists.data,
@@ -32,11 +32,14 @@ const ArtistList = ({ artists = [], count, loading, load, history }) => {
   useEffect(() => { find({ limit: LIMIT_PER_PAGE }).then(handleLoad(load)) }, [load])
 
   useEffect(() => {
+    const pages = count ? Math.ceil(count / LIMIT_PER_PAGE) : 1
     setPagination({
-      active: 1,
-      pages: count ? Math.ceil(count / LIMIT_PER_PAGE) + 1 : 0
+      active: pagination.active > pages 
+        ? pages
+        : pagination.active,
+      pages,
     })
-  }, [count])
+  }, [count, pagination.active])
 
   const handleChange = e => setSearch(e.target.value)
 
@@ -78,12 +81,6 @@ const ArtistList = ({ artists = [], count, loading, load, history }) => {
         limit: LIMIT_PER_PAGE, 
       }))
       .then(handleLoad(load))
-      .then(() => setPagination({
-        ...pagination,
-        active: pagination.active > pagination.pages 
-          ? pagination.pages 
-          : pagination.active,
-      }))
     setDialog(false)
   }
 

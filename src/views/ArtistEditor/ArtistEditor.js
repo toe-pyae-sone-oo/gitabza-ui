@@ -30,12 +30,16 @@ const ArtistEditor = ({ loading, history, match }) => {
   })
 
   useEffect(() => {
+    let mounted = true;
     if (artistId) {
       findById(artistId).then(({ name, slug, picture }) => {
-        setForm({ name, slug })
-        setPicUrl(picture)
+        if (mounted) {
+          setForm({ name, slug })
+          setPicUrl(picture) 
+        }
       })
     }
+    return () => mounted = false
   }, [artistId])
 
   const handleChange = e => {

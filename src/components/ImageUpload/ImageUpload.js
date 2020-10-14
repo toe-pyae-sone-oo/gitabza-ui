@@ -2,10 +2,14 @@ import React, { useState, useEffect } from 'react'
 import { Form, Image } from 'react-bootstrap'
 import './ImageUpload.css'
 
-const ImageUpload = ({ onUpload, width = 150, height = 150 }) => {
+const ImageUpload = ({ url, onUpload, width = 150, height = 150 }) => {
 
   const [file, setFile] = useState(undefined)
   const [fileUrl, setFileUrl] = useState(undefined)
+
+  useEffect(() => {
+    setFileUrl(url)
+  }, [url])
 
   let _file
 
@@ -39,7 +43,7 @@ const ImageUpload = ({ onUpload, width = 150, height = 150 }) => {
         className="ImageUpload--img"
         style={{ width, height }}
         thumbnail
-        src={fileUrl ? fileUrl : `${window.location.origin}/logo192.png`} 
+        src={fileUrl ?? `${window.location.origin}/logo192.png`} 
       />
     </div>
   ) 

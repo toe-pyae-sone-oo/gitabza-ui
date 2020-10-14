@@ -22,6 +22,8 @@ const ArtistEditor = ({ loading, history, match }) => {
 
   const [file, setFile] = useState(undefined)
 
+  const [picUrl, setPicUrl] = useState(undefined)
+
   const [errors, setErrors] = useState({
     name: '',
     slug: '',
@@ -29,7 +31,10 @@ const ArtistEditor = ({ loading, history, match }) => {
 
   useEffect(() => {
     if (artistId) {
-      findById(artistId).then(({ name, slug }) => setForm({ name, slug }))
+      findById(artistId).then(({ name, slug, picture }) => {
+        setForm({ name, slug })
+        setPicUrl(picture)
+      })
     }
   }, [artistId])
 
@@ -123,7 +128,7 @@ const ArtistEditor = ({ loading, history, match }) => {
             </Form.Group>
             <Form.Group>
               <Form.Label>Picture</Form.Label>
-              <ImageUpload onUpload={handleUpload} />
+              <ImageUpload url={picUrl} onUpload={handleUpload} />
             </Form.Group>
             <PrimaryButton 
               type="submit" 

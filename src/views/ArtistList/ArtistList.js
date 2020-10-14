@@ -158,7 +158,7 @@ const ArtistList = ({ artists = [], count, loading, load, history }) => {
                   </tr>
                 : artists.map((artist, i) => 
                     <tr key={artist.uuid}>
-                      <td>{i + 1}</td>
+                      <td>{((pagination.active - 1) * LIMIT_PER_PAGE) + i + 1}</td>
                       <td>{artist.name}</td>
                       <td>
                         <Button 

@@ -11,3 +11,12 @@ export const upload = file => {
   return httpClient.post('/artists/upload/pic', formData)
     .then(({ data }) => data)
 }
+
+export const find = ({ name = undefined, skip = 0, limit = 10 }) => {
+  let query = name ? `name=${name.trim()}&` : ''
+  query += `skip=${skip}&`
+  query += `limit=${limit}`
+
+  return httpClient.get(`/artists?${query}`)
+    .then(({ data }) => data)
+}

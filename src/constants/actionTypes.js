@@ -1,1 +1,3 @@
 export const SET_LOADING = 'SET_LOADING'
+
+export const LOAD_ADMIN_ARTISTS = 'LOAD_ADMIN_ARTISTS'

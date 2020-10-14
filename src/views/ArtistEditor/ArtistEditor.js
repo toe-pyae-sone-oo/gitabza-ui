@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Card, Form, Button } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import ImageUpload from '../../components/ImageUpload/ImageUpload'
 import PrimaryButton from '../../components/PrimaryButton/PrimaryButton'
-import { create, upload } from '../../api/artists'
+import { create, upload, findById, update } from '../../api/artists'
 import { validateArtistForm } from '../../validators'
 import './ArtistEditor.css'
 
@@ -11,11 +11,9 @@ const mapStateToProps = state => ({
   loading: state.loading,
 })
 
-const mapDispatchToProps = dispatch => ({
+const ArtistEditor = ({ loading, history, match }) => {
 
-})
-
-const ArtistEditor = ({ loading, history }) => {
+  const artistId = match.params.id || undefined
 
   const [form, setForm] = useState({
     name: '',
@@ -28,6 +26,12 @@ const ArtistEditor = ({ loading, history }) => {
     name: '',
     slug: '',
   })
+
+  useEffect(() => {
+    if (artistId) {
+      findById(artistId).then(({ name, slug }) => setForm({ name, slug }))
+    }
+  }, [artistId])
 
   const handleChange = e => {
     setForm({
@@ -68,10 +72,18 @@ const ArtistEditor = ({ loading, history }) => {
           return
         }
       }
-      // handle creating new artist
-      create({ ...form, picture })
-        .then(() => history.push('/admin/artists'))
-        .catch(handleError(_errors))
+
+      if (artistId) {
+        // handle updating artist
+        update(artistId, { ...form, picture })
+          .then(() => history.push('/admin/artists'))
+          .catch(handleError(_errors))
+      } else {
+        // handle creating new artist
+        create({ ...form, picture })
+          .then(() => history.push('/admin/artists'))
+          .catch(handleError(_errors))
+      }
     }
   }
 
@@ -79,7 +91,7 @@ const ArtistEditor = ({ loading, history }) => {
     <>
       <Card>
         <Card.Body>
-          <Card.Title>Add New Artist</Card.Title>
+          <Card.Title>{artistId ? 'Edit Artist' : 'Add New Artist'}</Card.Title>
           <Form onSubmit={handleSubmit}>
             <Form.Group>
               <Form.Label>Name</Form.Label>
@@ -126,4 +138,4 @@ const ArtistEditor = ({ loading, history }) => {
   )
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ArtistEditor)
+export default connect(mapStateToProps, null)(ArtistEditor)

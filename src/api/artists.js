@@ -24,3 +24,13 @@ export const find = ({ name = undefined, skip = 0, limit = 10 }) => {
 export const remove = id => {
   return httpClient.delete(`/artists/${id}`)
 }
+
+export const findById = id => {
+  return httpClient.get(`/artists/${id}`)
+    .then(({ data }) => data)
+}
+
+export const update = (id, body) => {
+  return httpClient.put(`/artists/${id}`, body)
+    .then(({ data }) => data)
+}

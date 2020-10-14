@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { Card, Table, Button, InputGroup, FormControl } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import PrimaryButton from '../../components/PrimaryButton/PrimaryButton'
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch, faPlus, faTrash, faPencilAlt } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faSearch, faPlus, faTrash, faPencilAlt } from "@fortawesome/free-solid-svg-icons"
 import { find } from '../../api/artists'
 import { LOAD_ADMIN_ARTISTS } from '../../constants/actionTypes'
 import './ArtistList.css'
@@ -24,17 +24,14 @@ const ArtistList = ({ artists = [], count, loading, load }) => {
 
   const [search, setSearch] = useState('')
 
-  useEffect(() => {
-    find({}).then(handleLoad(load))
-  }, [load])
+  useEffect(() => { find({}).then(handleLoad(load)) }, [load])
 
   const handleChange = e => {
     setSearch(e.target.value)
   }
 
-  const handleSearch = () => {
+  const handleSearch = () => 
     find({ name: search.trim() ?? undefined }).then(handleLoad(load))
-  }
 
   return (
     <>

@@ -4,14 +4,27 @@ import { Form, Col, Button, Card } from 'react-bootstrap'
 import { validateSongForm } from '../../validators'
 import { getCapo } from '../../helpers/songs'
 import { create, findById, update } from '../../api/songs'
+import { getNames as getArtistNames } from '../../api/artists'
+import { LOAD_ADMIN_ARTIST_NAMES } from '../../constants/actionTypes'
 import PrimaryButton from '../../components/PrimaryButton/PrimaryButton'
 import './SongEditor.css'
 
 const mapStateToProps = state => ({
   loading: state.loading,
+  artists: state.adminArtists.names,
 })
 
-const SongEditor = ({ loading, history, match }) => {
+const mapDispatchToProps = dispatch => ({
+  loadArtistNames: payload => dispatch({ type: LOAD_ADMIN_ARTIST_NAMES, payload })
+})
+
+const SongEditor = ({ 
+  loading, 
+  artists = [], 
+  loadArtistNames, 
+  history, 
+  match 
+}) => {
   
   const songId = match.params.id
 
@@ -33,15 +46,6 @@ const SongEditor = ({ loading, history, match }) => {
     artists: '',
   })
 
-  const handleChange = e => {
-    const key = e.target.name
-    const val = e.target.value
-    setForm({
-      ...form,
-      [key]: val,
-    })
-  }
-
   useEffect(() => {
     let mounted = true
     if (songId) {
@@ -54,6 +58,11 @@ const SongEditor = ({ loading, history, match }) => {
     return () => mounted = false
   }, [songId])
 
+  useEffect(() => {
+    getArtistNames()
+      .then(data => loadArtistNames(data))
+  }, [loadArtistNames])
+
   const handleArtists = e => {
     setForm({
       ...form,
@@ -61,6 +70,15 @@ const SongEditor = ({ loading, history, match }) => {
         e.target.selectedOptions, 
         item => item.value
       )
+    })
+  }
+
+  const handleChange = e => {
+    const key = e.target.name
+    const val = e.target.value
+    setForm({
+      ...form,
+      [key]: val,
     })
   }
 
@@ -142,8 +160,12 @@ const SongEditor = ({ loading, history, match }) => {
                 <option value={null} disabled>
                   Choose Artist, Song Writer, Band, etc...
                 </option>
-                <option>Y Wine</option>
-                <option>Lay Phyu</option>
+                {artists.map(artist => 
+                  <option 
+                    key={artist.uuid} 
+                    value={artist.uuid}
+                  >{artist.name}</option>
+                )}
               </Form.Control>
               <Form.Control.Feedback type="invalid">
                 {errors.artists}
@@ -256,4 +278,4 @@ const SongEditor = ({ loading, history, match }) => {
   )
 }
   
-export default connect(mapStateToProps)(SongEditor)
+export default connect(mapStateToProps, mapDispatchToProps)(SongEditor)

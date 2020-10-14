@@ -34,3 +34,8 @@ export const update = (id, body) => {
   return httpClient.put(`/artists/${id}`, body)
     .then(({ data }) => data)
 }
+
+export const getNames = () => {
+  return httpClient.get('/artists/all/names')
+    .then(({ data }) => data)
+}

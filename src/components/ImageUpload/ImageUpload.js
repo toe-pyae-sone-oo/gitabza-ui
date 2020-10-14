@@ -2,8 +2,13 @@ import React, { useState, useEffect } from 'react'
 import { Form, Image } from 'react-bootstrap'
 import './ImageUpload.css'
 
-const ImageUpload = ({ url, onUpload, width = 150, height = 150 }) => {
-
+const ImageUpload = ({ 
+  url, 
+  onUpload, 
+  width = 150, 
+  height = 150, 
+  disabled = false 
+}) => {
   const [file, setFile] = useState(undefined)
   const [fileUrl, setFileUrl] = useState(undefined)
 
@@ -13,9 +18,7 @@ const ImageUpload = ({ url, onUpload, width = 150, height = 150 }) => {
 
   let _file
 
-  const handleClick = () => {
-    _file.click()
-  }
+  const handleClick = () => disabled || _file.click()
 
   const handleChange = e => {
     const upload = e.target.files[0]

@@ -128,7 +128,11 @@ const ArtistEditor = ({ loading, history, match }) => {
             </Form.Group>
             <Form.Group>
               <Form.Label>Picture</Form.Label>
-              <ImageUpload url={picUrl} onUpload={handleUpload} />
+              <ImageUpload 
+                url={picUrl} 
+                onUpload={handleUpload} 
+                disabled={loading}
+              />
             </Form.Group>
             <PrimaryButton 
               type="submit" 

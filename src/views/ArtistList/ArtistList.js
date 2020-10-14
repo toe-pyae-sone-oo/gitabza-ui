@@ -130,12 +130,13 @@ const ArtistList = ({ artists = [], count, loading, load }) => {
               }
             </tbody>
           </Table>
-          <Pagination>
-            {[...Array(loading ? 0 : pagination.pages)].map((_, i) =>
+          <Pagination className="justify-content-center">
+            {[...Array(pagination.pages)].map((_, i) =>
               <Pagination.Item 
                 key={i} 
                 active={pagination.active === (i + 1)}
                 onClick={() => handlePagination(i + 1)}
+                disabled={loading && pagination.active !== (i + 1)}
               >
                 {i + 1}
               </Pagination.Item>

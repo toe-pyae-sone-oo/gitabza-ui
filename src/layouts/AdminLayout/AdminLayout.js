@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Switch, Route } from 'react-router-dom'
 import { Container, Row, Col } from 'react-bootstrap'
 import classNames from 'classnames'
+import SongList from '../../views/SongList/SongList'
 import SongEditor from '../../views/SongEditor/SongEditor'
 import ArtistEditor from '../../views/ArtistEditor/ArtistEditor'
 import ArtistList from '../../views/ArtistList/ArtistList'
@@ -52,6 +53,7 @@ const AdminLayout = () => {
               <Route exact path="/admin/artists" component={ArtistList} />
               <Route path="/admin/artists/new" component={ArtistEditor} />
               <Route path="/admin/artists/:id/edit" component={ArtistEditor} />
+              <Route exact path="/admin/songs" component={SongList} />
               <Route path="/admin/songs/new" component={SongEditor} />
             </Switch>
           </Col>

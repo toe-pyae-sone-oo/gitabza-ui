@@ -20,3 +20,7 @@ export const find = ({ name = undefined, skip = 0, limit = 10 }) => {
   return httpClient.get(`/artists?${query}`)
     .then(({ data }) => data)
 }
+
+export const remove = id => {
+  return httpClient.delete(`/artists/${id}`)
+}

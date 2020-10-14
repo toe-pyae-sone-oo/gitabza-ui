@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import PrimaryButton from '../../components/PrimaryButton/PrimaryButton'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faSearch, faPlus, faTrash, faPencilAlt } from "@fortawesome/free-solid-svg-icons"
-import { find } from '../../api/artists'
+import { find, remove } from '../../api/artists'
 import { LOAD_ADMIN_ARTISTS } from '../../constants/actionTypes'
 import './ArtistList.css'
 
@@ -56,6 +56,22 @@ const ArtistList = ({ artists = [], count, loading, load }) => {
       limit: LIMIT_PER_PAGE,
     })
       .then(handleLoad(load))
+  }
+
+  const handleDelete = id => {
+    remove(id)
+      .then(() => find({ 
+        name: search.trim() ?? undefined,
+        skip: (pagination.page - 1) * LIMIT_PER_PAGE,
+        limit: LIMIT_PER_PAGE, 
+      }))
+      .then(handleLoad(load))
+      .then(() => setPagination({
+        ...pagination,
+        active: pagination.active > pagination.pages 
+          ? pagination.pages 
+          : pagination.active,
+      }))
   }
 
   return (
@@ -121,6 +137,7 @@ const ArtistList = ({ artists = [], count, loading, load }) => {
                         <Button 
                           variant="danger" 
                           size="sm"
+                          onClick={() => handleDelete(artist.uuid)}
                         >
                           <FontAwesomeIcon size="sm" icon={faTrash} />
                         </Button>

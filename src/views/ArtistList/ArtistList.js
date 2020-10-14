@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Card, Table, Button, InputGroup, FormControl } from 'react-bootstrap'
+import { Card, Table, Button, InputGroup, FormControl, Pagination } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import PrimaryButton from '../../components/PrimaryButton/PrimaryButton'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -7,6 +7,8 @@ import { faSearch, faPlus, faTrash, faPencilAlt } from "@fortawesome/free-solid-
 import { find } from '../../api/artists'
 import { LOAD_ADMIN_ARTISTS } from '../../constants/actionTypes'
 import './ArtistList.css'
+
+const LIMIT_PER_PAGE = 10
 
 const mapPropsToState = state => ({
   artists: state.adminArtists.data,
@@ -23,15 +25,38 @@ const handleLoad = load =>  ({ artists, count }) => load({ count, data: artists 
 const ArtistList = ({ artists = [], count, loading, load }) => {
 
   const [search, setSearch] = useState('')
+  const [pagination, setPagination] = useState({ active: 1, pages: 1 })
 
-  useEffect(() => { find({}).then(handleLoad(load)) }, [load])
+  useEffect(() => { find({ limit: LIMIT_PER_PAGE }).then(handleLoad(load)) }, [load])
 
-  const handleChange = e => {
-    setSearch(e.target.value)
+  useEffect(() => {
+    setPagination({
+      active: 1,
+      pages: count ? parseInt(count / LIMIT_PER_PAGE) : 0
+    })
+  }, [count])
+
+  const handleChange = e => setSearch(e.target.value)
+
+  const handleSearch = () => find({ 
+    name: search.trim() ?? undefined, 
+    limit: LIMIT_PER_PAGE 
+  })
+    .then(handleLoad(load))
+
+  const handlePagination = page => {
+    
+    if (page === pagination.active) { return }
+
+    setPagination({ ...pagination, active: page })
+
+    find({ 
+      name: search.trim() ?? undefined, 
+      skip: (page - 1) * LIMIT_PER_PAGE,
+      limit: LIMIT_PER_PAGE,
+    })
+      .then(handleLoad(load))
   }
-
-  const handleSearch = () => 
-    find({ name: search.trim() ?? undefined }).then(handleLoad(load))
 
   return (
     <>
@@ -105,6 +130,17 @@ const ArtistList = ({ artists = [], count, loading, load }) => {
               }
             </tbody>
           </Table>
+          <Pagination>
+            {[...Array(loading ? 0 : pagination.pages)].map((_, i) =>
+              <Pagination.Item 
+                key={i} 
+                active={pagination.active === (i + 1)}
+                onClick={() => handlePagination(i + 1)}
+              >
+                {i + 1}
+              </Pagination.Item>
+            )}
+          </Pagination>
         </Card.Body>
       </Card>
     </>

@@ -1,5 +1,6 @@
 import { validator as artistValidator } from './artists'
 import { validator as songValidator } from './songs'
+import { validator as adminLoginValidator } from './adminLogin'
 
 const validate = validator => form => Object.keys(validator)
   .map(key => ({ [key]: validator[key](form[key]) }))
@@ -8,3 +9,5 @@ const validate = validator => form => Object.keys(validator)
 export const validateArtistForm = validate(artistValidator)
 
 export const validateSongForm = validate(songValidator)
+
+export const validateAdminLoginForm = validate(adminLoginValidator)

@@ -35,7 +35,7 @@ httpClient.interceptors.response.use(
         message: err.response.data.message,
         status: err.response.status,
       })
-      return
+      throw err
     }
 
   })

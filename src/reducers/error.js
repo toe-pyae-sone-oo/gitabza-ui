@@ -1,8 +1,8 @@
-import { SET_ADMIN_TOKEN } from '../constants/actionTypes'
+import { SET_ERROR } from '../constants/actionTypes'
 
 export default (state = false, action) => {
   switch (action.type) {
-    case SET_ADMIN_TOKEN:
+    case SET_ERROR:
       return action.payload
     default:
       return state

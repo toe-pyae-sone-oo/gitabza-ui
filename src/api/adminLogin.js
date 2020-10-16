@@ -1,4 +1,4 @@
-import httpClient from './config'
+import { httpClient } from './config'
 
 export const login = payload => {
   return httpClient.post('/admin/login', payload)

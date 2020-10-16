@@ -1,10 +1,12 @@
 import axios from 'axios'
 import { API_URL } from '../constants/api'
-import { SET_LOADING } from '../constants/actionTypes'
+import { SET_LOADING, SET_ERROR } from '../constants/actionTypes'
 import { store } from '../store'
 
 const startLoading = store => store.dispatch({ type: SET_LOADING, loading: true })
 const stopLoading = store => store.dispatch({ type: SET_LOADING, loading: false })
+
+const setError = err => store.dispatch({ type: SET_ERROR, payload: err })
 
 const httpClient = axios.create({
   baseURL: API_URL
@@ -27,8 +29,17 @@ httpClient.interceptors.response.use(
       throw err 
     }
 
-    // TODO: handle error
-    throw err
+    // handle `unauthorized` error
+    if (err.response && err.response.status === 401) {
+      setError({ 
+        message: err.response.data.message,
+        status: err.response.status,
+      })
+      return
+    }
+
   })
 
-export default httpClient
+export {
+  httpClient,
+}

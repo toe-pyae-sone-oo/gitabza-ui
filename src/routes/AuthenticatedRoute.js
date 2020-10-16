@@ -5,7 +5,7 @@ export default ({ component: C, appProps, redirect, ...rest }) =>
   <Route
     {...rest}
     render={props =>
-      appProps.isAuthenticated
+      appProps.authenticated
         ? <C {...props} {...appProps} />
         : <Redirect
             to={`${redirect}?redirect=${props.location.pathname}${props.location.search}`}

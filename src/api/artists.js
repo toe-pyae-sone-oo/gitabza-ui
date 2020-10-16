@@ -1,4 +1,4 @@
-import httpClient from './config'
+import { httpClient } from './config'
 
 export const create = payload => {
   return httpClient.post('/artists', payload)

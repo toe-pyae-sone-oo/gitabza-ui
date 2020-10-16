@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Switch } from 'react-router-dom'
+import { connect } from 'react-redux'
 import { Container, Row, Col } from 'react-bootstrap'
 import classNames from 'classnames'
 import SongList from '../../views/SongList/SongList'
@@ -11,14 +12,32 @@ import AdminNav from '../../components/AdminNav/AdminNav'
 import AdminSidebar from '../../components/AdminSideBar/AdminSideBar'
 import AuthenticatedRoute from '../../routes/AuthenticatedRoute'
 import UnauthenticatedRoute from '../../routes/UnauthenticatedRoute'
+import { getToken } from '../../helpers/adminLogin'
+import { SET_ADMIN_TOKEN } from '../../constants/actionTypes'
 import './AdminLayout.css'
 
 const WIDTH_LIMIT = 768
 
-const AdminLayout = () => {
+const mapStateToProps = state => ({
+  token: state.adminToken,
+})
+
+const mapDispatchToProps = dispatch => ({
+  setToken: token => dispatch({ type: SET_ADMIN_TOKEN, payload: token })
+})
+
+const AdminLayout = ({ token, setToken }) => {
   const [isOpen, setOpen] = useState(window.innerWidth > WIDTH_LIMIT)
   const [prevWidth, setPrevWidth] = useState(-1)
-  const [isAuthenticated, setAuthenticated] = useState(false) 
+  const [authenticated, setAuthenticated] = useState(!!getToken())
+
+  useEffect(() => {
+    setToken(getToken())
+  }, [setToken])
+
+  useEffect(() => {
+    setAuthenticated(!!token || !!getToken())
+  }, [token])
 
   const toggleSidebar = () => setOpen(!isOpen)
 
@@ -45,61 +64,61 @@ const AdminLayout = () => {
 
   return (
     <div>
-      {isAuthenticated && <AdminNav toggle={toggleSidebar} />}
-      {isAuthenticated && <AdminSidebar isOpen={isOpen} />}
+      {authenticated && <AdminNav toggle={toggleSidebar} />}
+      {authenticated && <AdminSidebar isOpen={isOpen} />}
       <Container  
         fluid
         className={classNames({ 
-          'AdminLayoutContainer--is-open': isOpen && isAuthenticated, 
-          AdminLayoutContainer: isAuthenticated 
+          'AdminLayoutContainer--is-open': isOpen && authenticated, 
+          AdminLayoutContainer: authenticated 
         })}
       >
-        <Row className={classNames({ 'vh-100': !isAuthenticated })}>
-          <Col className={classNames({ 'my-auto': !isAuthenticated })}>
+        <Row className={classNames({ 'vh-100': !authenticated })}>
+          <Col className={classNames({ 'my-auto': !authenticated })}>
             <Switch>
-              <UnauthenticatedRoute 
-                path="/admin/login" 
-                component={AdminLogin} 
-                appProps={{ isAuthenticated }}
-                redirect={'/admin'}
-              />
               <AuthenticatedRoute 
                 exact 
                 path="/admin/artists" 
                 component={ArtistList} 
-                appProps={{ isAuthenticated }}
+                appProps={{ authenticated }}
                 redirect={'/admin/login'}
               />
               <AuthenticatedRoute 
                 path="/admin/artists/new" 
                 component={ArtistEditor} 
-                appProps={{ isAuthenticated }}
+                appProps={{ authenticated }}
                 redirect={'/admin/login'}
               />
               <AuthenticatedRoute 
                 path="/admin/artists/:id/edit" 
                 component={ArtistEditor} 
-                appProps={{ isAuthenticated }}
+                appProps={{ authenticated }}
                 redirect={'/admin/login'}
               />
               <AuthenticatedRoute 
                 exact 
                 path="/admin/songs" 
                 component={SongList} 
-                appProps={{ isAuthenticated }}
+                appProps={{ authenticated }}
                 redirect={'/admin/login'}
               />
               <AuthenticatedRoute 
                 path="/admin/songs/new" 
                 component={SongEditor} 
-                appProps={{ isAuthenticated }}
+                appProps={{ authenticated }}
                 redirect={'/admin/login'}
               />
               <AuthenticatedRoute 
                 path="/admin/songs/:id/edit" 
                 component={SongEditor} 
-                appProps={{ isAuthenticated }}
+                appProps={{ authenticated }}
                 redirect={'/admin/login'}
+              />
+              <UnauthenticatedRoute 
+                path="/admin/login" 
+                component={AdminLogin} 
+                appProps={{ authenticated }}
+                redirect={'/admin'}
               />
             </Switch>
           </Col>
@@ -109,4 +128,4 @@ const AdminLayout = () => {
   )
 }
 
-export default AdminLayout
+export default connect(mapStateToProps, mapDispatchToProps)(AdminLayout)

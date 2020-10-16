@@ -2,6 +2,7 @@ import axios from 'axios'
 import { API_URL } from '../constants/api'
 import { SET_LOADING, SET_ERROR } from '../constants/actionTypes'
 import { store } from '../store'
+import { getToken } from '../helpers/adminLogin'
 
 const startLoading = store => store.dispatch({ type: SET_LOADING, loading: true })
 const stopLoading = store => store.dispatch({ type: SET_LOADING, loading: false })
@@ -40,6 +41,16 @@ httpClient.interceptors.response.use(
 
   })
 
+const adminAuthHeader = () => {
+  const token = getToken()
+  return {
+    headers: {
+      Authorization: token ? `Bearer ${token}`: undefined,
+    }
+  }
+}
+
 export {
   httpClient,
+  adminAuthHeader,
 }

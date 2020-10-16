@@ -118,7 +118,7 @@ const AdminLayout = ({ token, setToken }) => {
                 path="/admin/login" 
                 component={AdminLogin} 
                 appProps={{ authenticated }}
-                redirect={'/admin'}
+                redirect={'/admin/artists'}
               />
             </Switch>
           </Col>

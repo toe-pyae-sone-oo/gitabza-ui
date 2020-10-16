@@ -30,7 +30,6 @@ const App = ({ error, setError, setAdminToken, history }) => {
     if (error.status === 401) {
       removeToken()
       setAdminToken(false)
-      history.push('/admin/login')
     }
   }
 
